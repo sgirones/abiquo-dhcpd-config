@@ -96,15 +96,7 @@ def create_vlans_script(service_interface, vlan_range, service_network):
         data = '\nstop() { \n'
         data += '    echo -n $"Stopping $prog: "\n'
         data += '    \n'
-        data += '    if [ ! -e /var/lock/subsys/vlans-config ]; then\n'
-        data += '        echo -n $"cannot stop vlans-config: vlans-config is not running."\n'
-        data += '        failure $"cannot stop vlans-config: vlans-config is not running."\n'
-        data += '        echo\n'
-        data += '        return 1;\n'
-        data += '    fi\n'
-        data += '    \n'
         data += '    killproc vlans-config\n'
-        data += '    service dhcpd stop\n'
         data += '    \n'
         data += '    for i in `seq %d %d`; do\n' % (minvlan, maxvlan)
         data += '        vconfig rem %s.$i\n' % (service_interface)
@@ -112,7 +104,6 @@ def create_vlans_script(service_interface, vlan_range, service_network):
         data += '    \n'
         data += '    RETVAL=$?\n'
         data += '    echo\n'
-        data += '    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/vlans-config;\n'
         data += '    return $RETVAL\n'
         data += '}\n'
         f.write(data)
@@ -171,10 +162,10 @@ def create_dhcpd_config(vlan_range, service_interface):
 def usage():
     print "Usage: abiquo-dhcpd-config.py [OPTIONS]..."
     print "Creates configuration files and start scripts for the dhcp server and vlans.\n"
-    print "-h\t--help\t\t\t\t\tThis help screen."
-    print "-s\t--service-interface=INTERFACE\tInterface of the relay server connected to service network, where VLANs will be created."
-    print "-v\t--vlan-range=VLANRANGE\t\t\tVLAN range (e.g. 2-200)."
-    print "-n\t--service-network=IP\t\tNetwork available for relay service interfaces (has to finish in 0)."
+    print "-h\t--help\t\t\t\tThis help screen."
+    print "-s\t--service-interface=INTERFACE\tInterface of the service network interface, where VLANs will be created."
+    print "-v\t--vlan-range=VLANRANGE\t\tVLAN range (e.g. 2-200)."
+    print "-n\t--service-network=IP\t\tNetwork available for service network interfaces (has to finish in 0)."
     print ""
 
 def main():
