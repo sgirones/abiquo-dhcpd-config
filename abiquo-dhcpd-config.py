@@ -195,18 +195,6 @@ def main():
         usage()
         return
         
-    try:
-        minvlan = int(vlan_range.split('-')[0])
-        maxvlan = int(vlan_range.split('-')[1])
-        numvlans = maxvlan-minvlan+1
-        if (numvlans > 200):
-            print "This Abiquo DHCP method only allows 200 vlans due DHCP server performance"
-            print "If you need more vlans, please check Abiquo DHCP relay"
-            return
-    except:
-        print "\nError parsing vlans range.\n"
-        sys.exit(2)
-
     print "-- Generating file --\n"
 
     #Vlans script
