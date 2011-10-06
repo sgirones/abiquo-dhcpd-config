@@ -85,7 +85,7 @@ def create_vlans_script(service_interface, vlan_range, service_network):
             data += '        vlan=$[%s + $i - 1 + %s]\n' % (int(loops*254), int(minvlan))
             data += '        vconfig add %s $vlan\n' % (str(service_interface))
             data += '        ifconfig %s.$vlan up\n' % (str(service_interface))
-            data += '        ifconfig %s.$vlan 192.168.%d.$i netmask 255.255.255.255\n' % (str(service_interface), int(service_network.split(".")[2]) + loops)
+            data += '        ifconfig %s.$vlan %d.%d.%d.$i netmask 255.255.255.255\n' % (str(service_interface), int(service_network.split(".")[0]), int(service_network.split(".")[1]), int(service_network.split(".")[2]) + loops)
             data += '    done\n'
 
         #Close start
